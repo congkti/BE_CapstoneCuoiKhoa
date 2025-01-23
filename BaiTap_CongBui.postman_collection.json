@@ -1,0 +1,1216 @@
+{
+	"info": {
+		"_postman_id": "5925a329-6e23-4f4f-b54b-17c8cb747ae7",
+		"name": "BaiTap_CongBui",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38658696"
+	},
+	"item": [
+		{
+			"name": "DA Cuoi Khoa Node JS",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"cong32@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"firstName\": \"   Hữu  Công   \",\r\n    \"lastName\": \"  Bùi   \",\r\n    \"birthDay\": \"25/01/1984\",\r\n    \"phone\": \"\",\r\n    \"address\":\"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local3030}}auth/register",
+									"host": [
+										"{{local3030}}auth"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login By Email or Username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"if(response.status === \"\") return;\r",
+											"\r",
+											"const accessToken = response.metaData.acT;\r",
+											"const refreshToken = responseHeaders.babythree;\r",
+											"const userId = response.metaData.user_id;\r",
+											"\r",
+											"pm.collectionVariables.set(\"acT\", accessToken);\r",
+											"pm.collectionVariables.set(\"reT\", refreshToken);\r",
+											"pm.collectionVariables.set(\"loggedUserId\", userId);\r",
+											"pm.collectionVariables.set(\"acT_renew\", accessToken);\r",
+											"pm.collectionVariables.set(\"reT_renew\", refreshToken);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"cong1@gmail.com\",\r\n    \"password\": \"123\"\r\n}\r\n// key-name phải đúng \"username\" và \"password\" để dùng Passport Local\r\n// username: có thể nhập email hoặc user_name đều được\r\n// test username = congbui/123  - admin\r\n// user bị ban/delete: jane.smith@example.com/password123",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local3030}}auth/login",
+									"host": [
+										"{{local3030}}auth"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const response = pm.response.json();\r",
+											"if(response.status === \"\") return;\r",
+											"\r",
+											"const accessTokenRenew = response.metaData.acT;\r",
+											"const refreshTokenRenew = responseHeaders.babythree;\r",
+											"\r",
+											"pm.collectionVariables.set(\"acT_renew\", accessTokenRenew);\r",
+											"pm.collectionVariables.set(\"reT_renew\", refreshTokenRenew);\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "babythree",
+										"value": "{{reT_renew}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local3030}}auth/refresh-token",
+									"host": [
+										"{{local3030}}auth"
+									],
+									"path": [
+										"refresh-token"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Get All Users",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}users",
+									"host": [
+										"{{local3030}}users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Users_Pagination",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}users/get-all-users-pagination?page=2&pageSize=5",
+									"host": [
+										"{{local3030}}users"
+									],
+									"path": [
+										"get-all-users-pagination"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										},
+										{
+											"key": "pageSize",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Current User Info",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}users/get-cur-user-info",
+									"host": [
+										"{{local3030}}users"
+									],
+									"path": [
+										"get-cur-user-info"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User Info_Local",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "userName",
+											"value": "congbui3",
+											"type": "text"
+										},
+										{
+											"key": "firstName",
+											"value": "    Công  ",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "  Bùi Hữu  ",
+											"type": "text"
+										},
+										{
+											"key": "birthDay",
+											"value": "25/01/1985",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "0988777555",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "Nhà Bè, HCMC",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/smartphone-ringing.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}users/update-user-info-avatar-local",
+									"host": [
+										"{{local3030}}users"
+									],
+									"path": [
+										"update-user-info-avatar-local"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User Info_Cloud",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "userName",
+											"value": "congbui3",
+											"type": "text"
+										},
+										{
+											"key": "firstName",
+											"value": "    Công  ",
+											"type": "text"
+										},
+										{
+											"key": "lastName",
+											"value": "  Bùi Hữu  ",
+											"type": "text"
+										},
+										{
+											"key": "birthDay",
+											"value": "25/01/1985",
+											"type": "text"
+										},
+										{
+											"key": "phone",
+											"value": "0988777555",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "Nhà Bè, HCMC",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/smartphone-ringing.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}users/update-user-info-avatar-cloud",
+									"host": [
+										"{{local3030}}users"
+									],
+									"path": [
+										"update-user-info-avatar-cloud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteUserById",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}users/delete-user-by-id/50",
+									"host": [
+										"{{local3030}}users"
+									],
+									"path": [
+										"delete-user-by-id",
+										"50"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RestoreUserById",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}users/restore-user-by-id/50",
+									"host": [
+										"{{local3030}}users"
+									],
+									"path": [
+										"restore-user-by-id",
+										"50"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Homes",
+					"item": [
+						{
+							"name": "Get All Homes",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}homes/get-all-homes",
+									"host": [
+										"{{local3030}}homes"
+									],
+									"path": [
+										"get-all-homes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Detail Home By Id",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}homes/get-detail-home-by-id/4",
+									"host": [
+										"{{local3030}}homes"
+									],
+									"path": [
+										"get-detail-home-by-id",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Home Local",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "homeName",
+											"value": "     Peaceful   Retreat xx   ",
+											"description": "id3",
+											"type": "text"
+										},
+										{
+											"key": "typeId",
+											"value": "3",
+											"description": "Home stay",
+											"type": "text"
+										},
+										{
+											"key": "locId",
+											"value": "5",
+											"description": "My Khe Beach, Da Nang, Vietnam",
+											"type": "text"
+										},
+										{
+											"key": "homeDescription",
+											"value": "    A quiet home    surrounded      by nature.  ",
+											"type": "text"
+										},
+										{
+											"key": "homePrice",
+											"value": "8.75",
+											"type": "text"
+										},
+										{
+											"key": "amountGuests",
+											"value": "6",
+											"type": "text"
+										},
+										{
+											"key": "amountBedrooms",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "amountBeds",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "amountBaths",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "gmapAddress",
+											"value": "Green Valley, Da Lat, Vietnam",
+											"type": "text"
+										},
+										{
+											"key": "hasHairDryer",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasWasher",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "hasClothesDryer",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasIron",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasTivi",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasAirCond",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "hasWifi",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasKitchen",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasParking",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasPool",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "hasFireplace",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "homeImage",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/metro_hcm.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}homes/update-home-local/3",
+									"host": [
+										"{{local3030}}homes"
+									],
+									"path": [
+										"update-home-local",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Home Cloud",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "homeName",
+											"value": "     Peaceful   Retreat 123   ",
+											"description": "id3",
+											"type": "text"
+										},
+										{
+											"key": "typeId",
+											"value": "3",
+											"description": "Home stay",
+											"type": "text"
+										},
+										{
+											"key": "locId",
+											"value": "5",
+											"description": "My Khe Beach, Da Nang, Vietnam",
+											"type": "text"
+										},
+										{
+											"key": "homeDescription",
+											"value": "    A quiet home    surrounded      by nature.  ",
+											"type": "text"
+										},
+										{
+											"key": "homePrice",
+											"value": "10.35",
+											"type": "text"
+										},
+										{
+											"key": "amountGuests",
+											"value": "6",
+											"type": "text"
+										},
+										{
+											"key": "amountBedrooms",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "amountBeds",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "amountBaths",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "gmapAddress",
+											"value": "Green Valley, Da Lat, Vietnam",
+											"type": "text"
+										},
+										{
+											"key": "hasHairDryer",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasWasher",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "hasClothesDryer",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasIron",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasTivi",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasAirCond",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "hasWifi",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasKitchen",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasParking",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasPool",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "hasFireplace",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "homeImage",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/metro_hcm.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}homes/update-home-cloud/3",
+									"host": [
+										"{{local3030}}homes"
+									],
+									"path": [
+										"update-home-cloud",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create New Home Local",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "homeName",
+											"value": "     Peaceful   Retreat 3   ",
+											"description": "id3",
+											"type": "text"
+										},
+										{
+											"key": "typeId",
+											"value": "6",
+											"description": "Home stay",
+											"type": "text"
+										},
+										{
+											"key": "locId",
+											"value": "1",
+											"description": "My Khe Beach, Da Nang, Vietnam",
+											"type": "text"
+										},
+										{
+											"key": "homeDescription",
+											"value": "    A quiet home    surrounded      by nature.  ",
+											"type": "text"
+										},
+										{
+											"key": "homePrice",
+											"value": "8.75",
+											"type": "text"
+										},
+										{
+											"key": "amountGuests",
+											"value": "6",
+											"type": "text"
+										},
+										{
+											"key": "amountBedrooms",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "amountBeds",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "amountBaths",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "gmapAddress",
+											"value": "Green Valley, Da Lat, Vietnam",
+											"type": "text"
+										},
+										{
+											"key": "hasHairDryer",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasWasher",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "hasClothesDryer",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasIron",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasTivi",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasAirCond",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "hasWifi",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasKitchen",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasParking",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasPool",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "hasFireplace",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "homeImage",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/metro_hcm.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}homes/create-new-home-local",
+									"host": [
+										"{{local3030}}homes"
+									],
+									"path": [
+										"create-new-home-local"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create New Home Cloud",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "homeName",
+											"value": "     Peaceful   Retreat 3 ",
+											"description": "id3",
+											"type": "text"
+										},
+										{
+											"key": "typeId",
+											"value": "3",
+											"description": "Home stay",
+											"type": "text"
+										},
+										{
+											"key": "locId",
+											"value": "5",
+											"description": "My Khe Beach, Da Nang, Vietnam",
+											"type": "text"
+										},
+										{
+											"key": "homeDescription",
+											"value": "    A quiet home    surrounded      by nature.  ",
+											"type": "text"
+										},
+										{
+											"key": "homePrice",
+											"value": "10.35",
+											"type": "text"
+										},
+										{
+											"key": "amountGuests",
+											"value": "6",
+											"type": "text"
+										},
+										{
+											"key": "amountBedrooms",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "amountBeds",
+											"value": "3",
+											"type": "text"
+										},
+										{
+											"key": "amountBaths",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "gmapAddress",
+											"value": "Green Valley, Da Lat, Vietnam",
+											"type": "text"
+										},
+										{
+											"key": "hasHairDryer",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasWasher",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "hasClothesDryer",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasIron",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasTivi",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasAirCond",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "hasWifi",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasKitchen",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasParking",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "hasPool",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "hasFireplace",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "homeImage",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/metro_hcm.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}homes/create-new-home-cloud",
+									"host": [
+										"{{local3030}}homes"
+									],
+									"path": [
+										"create-new-home-cloud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Homes By Location",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}homes/get-homes-by-location/1",
+									"host": [
+										"{{local3030}}homes"
+									],
+									"path": [
+										"get-homes-by-location",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Home",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}homes/delete-home/26",
+									"host": [
+										"{{local3030}}homes"
+									],
+									"path": [
+										"delete-home",
+										"26"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Check Connect",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local3030}}",
+					"host": [
+						"{{local3030}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Protect API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{acT_renew}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local3070}}users",
+					"host": [
+						"{{local3070}}users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local3070",
+			"value": "http://localhost:3070/",
+			"type": "string"
+		},
+		{
+			"key": "acT",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "reT",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "loggedUserId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "acT_renew",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "reT_renew",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "local3030",
+			"value": "http://localhost:3030/",
+			"type": "string"
+		},
+		{
+			"value": "",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}

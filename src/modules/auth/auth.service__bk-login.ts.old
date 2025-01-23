@@ -1,0 +1,115 @@
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { PrismaService } from 'src/common/prisma/prisma.service';
+import { LoginDto, RegisterDto, TUserTokens } from './dto/auth.dto';
+import * as bcrypt from 'bcrypt';
+import { cleanString } from 'src/common/utils/handle-string.util';
+import {
+  INVALID_USER,
+  USER_IS_BANNED,
+} from 'src/common/constant/global.constant';
+import { TokenService } from './tokens.service';
+
+@Injectable()
+export class AuthService {
+  constructor(
+    public prisma: PrismaService,
+    public tokenService: TokenService,
+  ) {}
+
+  async register(body: RegisterDto) {
+    const { email, password, first_name, last_name, birth_day, phone } = body;
+
+    // check unregistered email?
+    const userExits = await this.prisma.users.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (userExits)
+      throw new BadRequestException(
+        'Email has registered account. Please login!',
+      );
+    const fullName =
+      !first_name && !last_name
+        ? null
+        : !first_name
+          ? last_name
+          : !last_name
+            ? first_name
+            : `${first_name} ${last_name}`;
+    const newUser = await this.prisma.users.create({
+      data: {
+        email,
+        password: bcrypt.hashSync(password, 10),
+        first_name: cleanString(first_name) || null,
+        last_name: cleanString(last_name) || null,
+        full_name: cleanString(fullName) || null,
+        birth_day: birth_day || null,
+        phone: phone || null,
+      },
+      omit: {
+        password: true,
+        is_deleted: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
+
+    return newUser;
+  }
+
+  async login(body: LoginDto) {
+    // const { email, password } = body;
+
+    const userExits = await this.prisma.users.findFirst({
+      where: {
+        email: body.email,
+      },
+    });
+
+    // check email exits?
+    if (!userExits) throw new BadRequestException(INVALID_USER); // user unregistered
+
+    // email exits -> check pw
+    const dbPass = userExits.password;
+    const isPass = bcrypt.compareSync(body.password, dbPass);
+    if (!isPass) throw new BadRequestException(INVALID_USER); // pw is wrong
+    // pw match -> check banned user
+    if (userExits.is_deleted === true)
+      throw new UnauthorizedException(USER_IS_BANNED);
+
+    // ok all -> create token
+    const tokens = this.tokenService.createTokens({
+      user_id: userExits.user_id,
+    });
+
+    // const resUser = { ...userExits };
+    // delete resUser.password;
+    // delete resUser.is_deleted;
+    // delete resUser.first_name;
+    // delete resUser.last_name;
+    // delete resUser.created_at;
+    // delete resUser.updated_at;
+
+    const {
+      password,
+      is_deleted,
+      first_name,
+      last_name,
+      created_at,
+      updated_at,
+      ...resUser
+    } = userExits; //-> ko trả pw +... còn lại nạp vào resUser
+
+    return { ...resUser, ...tokens };
+  }
+
+  callRefreshToken() {
+    return 'callRefreshToken ok';
+  }
+}

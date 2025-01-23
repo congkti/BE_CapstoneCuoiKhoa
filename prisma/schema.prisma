@@ -1,0 +1,129 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model book_homes {
+  book_id       Int       @id @default(autoincrement())
+  home_id       Int?
+  user_id       Int?
+  checkin_date  DateTime  @db.Timestamp(0)
+  checkout_date DateTime  @db.Timestamp(0)
+  created_at    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at    DateTime? @default(now()) @db.Timestamp(0)
+  homes         homes?    @relation(fields: [home_id], references: [home_id], onDelete: NoAction, onUpdate: NoAction, map: "book_homes_ibfk_1")
+  users         users?    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "book_homes_ibfk_2")
+
+  @@index([home_id], map: "home_id")
+  @@index([user_id], map: "user_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model comments {
+  comment_id      Int       @id @default(autoincrement())
+  user_id         Int
+  home_id         Int?
+  comment_content String    @db.Text
+  comment_rate    Int?      @db.TinyInt
+  is_deleted      Boolean?  @default(false)
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+  updated_at      DateTime? @default(now()) @db.Timestamp(0)
+  users           users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_1")
+  homes           homes?    @relation(fields: [home_id], references: [home_id], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_2")
+
+  @@index([home_id], map: "home_id")
+  @@index([user_id], map: "user_id")
+}
+
+model home_location {
+  loc_id       Int       @id @default(autoincrement())
+  loc_name     String?   @db.VarChar(255)
+  loc_city     String    @db.VarChar(255)
+  loc_national String    @db.VarChar(100)
+  loc_pic_url  String?   @default("upload/default.png") @db.VarChar(255)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+  homes        homes[]
+}
+
+model homes {
+  home_id           Int                @id @default(autoincrement())
+  type_id           Int?
+  loc_id            Int?
+  home_name         String             @db.VarChar(255)
+  home_description  String?            @db.Text
+  home_price        Float?             @db.Float
+  pic_url           String?            @default("upload/default.png") @db.VarChar(255)
+  amount_guests     Int?
+  amount_bedrooms   Int?
+  amount_beds       Int?
+  amount_baths      Int?
+  has_hair_dryer    Boolean?
+  has_washer        Boolean?
+  has_clothes_dryer Boolean?
+  has_iron          Boolean?
+  has_tivi          Boolean?
+  has_air_cond      Boolean?
+  has_wifi          Boolean?
+  has_kitchen       Boolean?
+  has_parking       Boolean?
+  has_pool          Boolean?
+  has_fireplace     Boolean?
+  gmap_address      String?            @db.VarChar(255)
+  created_at        DateTime?          @default(now()) @db.Timestamp(0)
+  updated_at        DateTime?          @default(now()) @db.Timestamp(0)
+  book_homes        book_homes[]
+  comments          comments[]
+  rental_home_types rental_home_types? @relation(fields: [type_id], references: [type_id], onDelete: NoAction, onUpdate: NoAction, map: "homes_ibfk_1")
+  home_location     home_location?     @relation(fields: [loc_id], references: [loc_id], onDelete: NoAction, onUpdate: NoAction, map: "homes_ibfk_2")
+
+  @@index([loc_id], map: "loc_id")
+  @@index([type_id], map: "type_id")
+}
+
+model rental_home_types {
+  type_id    Int       @id @default(autoincrement())
+  type_name  String    @unique(map: "type_name") @db.VarChar(100)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  homes      homes[]
+}
+
+model roles {
+  role_id          Int       @id @default(autoincrement())
+  role_name        String    @unique(map: "role_name") @db.VarChar(100)
+  role_description String?   @db.VarChar(200)
+  is_active        Boolean?  @default(true)
+  created_at       DateTime? @default(now()) @db.Timestamp(0)
+  updated_at       DateTime? @default(now()) @db.Timestamp(0)
+  users            users[]
+}
+
+model users {
+  user_id    Int          @id @default(autoincrement())
+  email      String       @unique(map: "email") @db.VarChar(255)
+  password   String       @db.VarChar(255)
+  user_name  String?      @unique(map: "user_name") @db.VarChar(100)
+  first_name String?      @db.VarChar(100)
+  last_name  String?      @db.VarChar(100)
+  full_name  String?      @db.VarChar(100)
+  birth_day  DateTime?    @db.Timestamp(0)
+  avatar     String?      @default("upload/avatar/df_avatar.png") @db.VarChar(255)
+  phone      String?      @db.VarChar(100)
+  role_id    Int          @default(2)
+  is_deleted Boolean?     @default(false)
+  created_at DateTime?    @default(now()) @db.Timestamp(0)
+  updated_at DateTime?    @default(now()) @db.Timestamp(0)
+  address    String?      @db.VarChar(255)
+  book_homes book_homes[]
+  comments   comments[]
+  roles      roles        @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "users_ibfk_1")
+
+  @@index([role_id], map: "role_id")
+}
