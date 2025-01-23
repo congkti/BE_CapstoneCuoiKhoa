@@ -153,7 +153,7 @@ ON DUPLICATE KEY UPDATE role_description = VALUES(role_description);
 
 -- 2.2. Fake data for users với passwordHash (admin/123 | user/password123) (20 users)
 INSERT INTO users (full_name, email, password, role_id, is_deleted) VALUES
-('Admin', 'admin@gmail.com', '$2b$10$MtGr.i/YmFIMXzHV/QWfz.BaBJwu108X5Y5/ixzbo8qshAD9B/YWm', 1, FALSE),
+('Admin', 'supperadmin@gmail.com', '$2b$10$MtGr.i/YmFIMXzHV/QWfz.BaBJwu108X5Y5/ixzbo8qshAD9B/YWm', 1, FALSE),
 ('JohnDoe', 'john.doe@example.com', '$2b$10$35PYXkco58.Q8t/weSzKruhCUOwNeCiAS4tRi6tjt1H2WXHd2L3IC', 2, FALSE),
 ('JaneSmith', 'jane.smith@example.com', '$2b$10$35PYXkco58.Q8t/weSzKruhCUOwNeCiAS4tRi6tjt1H2WXHd2L3IC', 2, TRUE),
 ('Alice Johnson', 'alice.johnson@example.com', '$2b$10$35PYXkco58.Q8t/weSzKruhCUOwNeCiAS4tRi6tjt1H2WXHd2L3IC', 2, TRUE),
@@ -179,12 +179,12 @@ INSERT INTO users (full_name, email, password, role_id, is_deleted) VALUES
 
 -------------- update username cho tk admin id=1 -----
 UPDATE users
-SET user_name = 'congbui' WHERE user_id = 1;
+SET user_name = 'admin' WHERE user_id = 1;
 
 
 				-- 2.1. Fake data for users (20 users)
 				INSERT INTO users (full_name, email, password, role_id, is_deleted) VALUES
-				('Công Bùi', 'cong@gmail.com', '123', 1, FALSE),
+				('Admin', 'supperadmin@gmail.com', '123', 1, FALSE),
 				('John Doe', 'john.doe@example.com', 'password123', 2, FALSE),
 				('Jane Smith', 'jane.smith@example.com', 'password123', 2, FALSE),
 				('Alice Johnson', 'alice.johnson@example.com', 'password123', 2, FALSE),
