@@ -10,15 +10,18 @@ datasource db {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model book_homes {
-  book_id       Int       @id @default(autoincrement())
-  home_id       Int?
-  user_id       Int?
-  checkin_date  DateTime  @db.Timestamp(0)
-  checkout_date DateTime  @db.Timestamp(0)
-  created_at    DateTime? @default(now()) @db.Timestamp(0)
-  updated_at    DateTime? @default(now()) @db.Timestamp(0)
-  homes         homes?    @relation(fields: [home_id], references: [home_id], onDelete: NoAction, onUpdate: NoAction, map: "book_homes_ibfk_1")
-  users         users?    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "book_homes_ibfk_2")
+  book_id         Int       @id @default(autoincrement())
+  home_id         Int?
+  user_id         Int?
+  amount_adults   Int?      @default(1)
+  amount_children Int?      @default(0)
+  amount_baby     Int?      @default(0)
+  checkin_date    DateTime  @db.Timestamp(0)
+  checkout_date   DateTime  @db.Timestamp(0)
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+  updated_at      DateTime? @default(now()) @db.Timestamp(0)
+  homes           homes?    @relation(fields: [home_id], references: [home_id], onDelete: NoAction, onUpdate: NoAction, map: "book_homes_ibfk_1")
+  users           users?    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "book_homes_ibfk_2")
 
   @@index([home_id], map: "home_id")
   @@index([user_id], map: "user_id")
