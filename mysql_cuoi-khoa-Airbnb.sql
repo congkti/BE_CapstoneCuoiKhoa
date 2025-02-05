@@ -110,8 +110,9 @@ CREATE TABLE IF NOT EXISTS book_homes (
 	
 	home_id INT,
 	FOREIGN KEY (home_id) REFERENCES homes (home_id),
-	user_id INT,
-	FOREIGN KEY (user_id) REFERENCES users (user_id),
+	customer_user_id INT,
+-- 	FOREIGN KEY (user_id) REFERENCES users (user_id),
+	FOREIGN KEY (customer_user_id) REFERENCES users (user_id),
 	amount_adults INT DEFAULT 1,
 	amount_children INT DEFAULT 0,
 	amount_baby INT DEFAULT 0,
@@ -119,6 +120,9 @@ CREATE TABLE IF NOT EXISTS book_homes (
 	checkin_date TIMESTAMP NOT NULL,
 	checkout_date TIMESTAMP NOT NULL,
 	CHECK (checkout_date > checkin_date),
+	
+	booker_user_id INT,
+	FOREIGN KEY (booker_user_id) REFERENCES users (user_id),
 	
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -320,7 +324,18 @@ TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
 TRUE, TRUE, TRUE, TRUE, TRUE, 
 'Beverly Hills, Los Angeles, USA');
 
-
+customer_id INT,
+-- 	FOREIGN KEY (user_id) REFERENCES users (user_id),
+	FOREIGN KEY (customer_id) REFERENCES users (user_id),
+	amount_adults INT DEFAULT 1,
+	amount_children INT DEFAULT 0,
+	amount_baby INT DEFAULT 0,
+	
+	checkin_date TIMESTAMP NOT NULL,
+	checkout_date TIMESTAMP NOT NULL,
+	CHECK (checkout_date > checkin_date),
+	
+	registered_user_id INT,
 -- 2.5. Fake data for "book_homes"
 INSERT INTO book_homes (home_id, user_id, amount_adults, amount_children, amount_baby, checkin_date, checkout_date) VALUES
 (1, 2, 2, 0, 0, '2025-01-15 14:00:00', '2025-01-18 12:00:00'),
@@ -328,6 +343,13 @@ INSERT INTO book_homes (home_id, user_id, amount_adults, amount_children, amount
 (5, 8, 1, 0, 0, '2025-03-01 14:00:00', '2025-03-07 12:00:00'),
 (7, 3, 2, 0, 1, '2025-01-20 14:00:00', '2025-01-23 12:00:00'),
 (10, 6, 4, 0, 0, '2025-02-01 14:00:00', '2025-02-05 12:00:00');
+
+INSERT INTO book_homes (home_id, customer_user_id, amount_adults, amount_children, amount_baby, checkin_date, checkout_date, booker_user_id) VALUES
+(1, 2, 2, 0, 0, '2025-01-15 14:00:00', '2025-01-18 12:00:00', 2),
+(3, 5, 2, 1, 1, '2025-02-10 14:00:00', '2025-02-15 12:00:00', 5),
+(5, 8, 1, 0, 0, '2025-03-01 14:00:00', '2025-03-07 12:00:00', 8),
+(7, 3, 2, 0, 1, '2025-01-20 14:00:00', '2025-01-23 12:00:00', 3),
+(10, 6, 4, 0, 0, '2025-02-01 14:00:00', '2025-02-05 12:00:00', 6);
 
 -- 2.4. Fake data for "comments"
 INSERT INTO comments (user_id, home_id, comment_content, comment_rate) VALUES

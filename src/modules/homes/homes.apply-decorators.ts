@@ -6,7 +6,7 @@ import { ResponseMetaData } from 'src/common/decorators/response-mesage.decorato
 export const DecorGetAllHomes = () => {
   return applyDecorators(
     Public(),
-    ResponseMetaData('Get lists homes successful'),
+    ResponseMetaData('Get lists of homes successful'),
   );
 };
 
