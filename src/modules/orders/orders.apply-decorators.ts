@@ -17,3 +17,20 @@ export const DecorGetDetailOrder = () => {
 export const DecorCreateNewOrder = () => {
   return applyDecorators(ResponseMetaData('Create new order successful', 201));
 };
+
+// decorators UpdateOrder api
+export const DecorUpdateOrder = () => {
+  return applyDecorators(ResponseMetaData('Update order successful'));
+};
+
+// decorators DeleteteOrrder api
+export const DecorDeleteteOrrder = () => {
+  return applyDecorators(ResponseMetaData('Delete order successful'));
+};
+
+// decorators GetOrdersByCustomerId api
+export const DecorGetOrdersByCustomerId = () => {
+  return applyDecorators(
+    ResponseMetaData('Get lists orders of customer successful'),
+  );
+};

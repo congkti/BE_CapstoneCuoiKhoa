@@ -1183,7 +1183,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"homeId\": 5,\r\n    \"customerUserId\": 10,\r\n    \"amountAdults\": 3,\r\n    \"amountChildren\": 0,\r\n    \"amountBaby\": 1,\r\n    \"checkinDate\": \"25/01/2025\", // 'dd/MM/yyyy'\r\n    \"checkoutDate\": \"30/01/2025\" // 'dd/MM/yyyy'\r\n}",
+									"raw": "{\r\n    \"homeId\": 3,\r\n    \"customerUserId\": \"\" , // bỏ trống nếu book cho chính mình\r\n    \"amountAdults\": 2,\r\n    \"amountChildren\": 1,\r\n    \"amountBaby\": 1,\r\n    \"checkinDate\": \"28/01/2025\", // 'dd/MM/yyyy'\r\n    \"checkoutDate\": \"31/01/2025\" // 'dd/MM/yyyy'\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1201,116 +1201,9 @@
 								}
 							},
 							"response": []
-						}
-					]
-				}
-			]
-		},
-		{
-			"name": "Capstone_Pinterest",
-			"item": [
-				{
-					"name": "Auth",
-					"item": [
-						{
-							"name": "Register",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"cong4@gmail.com\",\r\n    \"password\": \"123\",\r\n    \"full_name\": \"Công Bùi4\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{local3070}}auth/register",
-									"host": [
-										"{{local3070}}auth"
-									],
-									"path": [
-										"register"
-									]
-								}
-							},
-							"response": []
 						},
 						{
-							"name": "Login",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"const response = pm.response.json();\r",
-											"if(response.status === \"\") return;\r",
-											"\r",
-											"const accessToken = response.metaData.acT;\r",
-											"const refreshToken = response.metaData.reT;\r",
-											"const userId = response.metaData.user_id;\r",
-											"\r",
-											"pm.collectionVariables.set(\"acT\", accessToken);\r",
-											"pm.collectionVariables.set(\"reT\", refreshToken);\r",
-											"pm.collectionVariables.set(\"loggedUserId\", userId);\r",
-											"pm.collectionVariables.set(\"acT_renew\", accessToken);\r",
-											"pm.collectionVariables.set(\"reT_renew\", refreshToken);\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"emily.white@example.com\",\r\n    \"password\": \"password123\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{local3070}}auth/login",
-									"host": [
-										"{{local3070}}auth"
-									],
-									"path": [
-										"login"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "RefreshToken",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"const response = pm.response.json();\r",
-											"if(response.status === \"\") return;\r",
-											"\r",
-											"const accessTokenRenew = response.metaData.acT;\r",
-											"const refreshTokenRenew = response.metaData.reT;\r",
-											"\r",
-											"pm.collectionVariables.set(\"acT_renew\", accessTokenRenew);\r",
-											"pm.collectionVariables.set(\"reT_renew\", refreshTokenRenew);\r",
-											"\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
+							"name": "Update Order By Id",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1322,17 +1215,11 @@
 										}
 									]
 								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "x-reT",
-										"value": "{{reT_renew}}",
-										"type": "text"
-									}
-								],
+								"method": "PUT",
+								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "",
+									"raw": "{\r\n    \"homeId\": \"8\",\r\n    \"customerUserId\": \"\", // bỏ trống nếu book cho chính mình\r\n    \"amountAdults\": \"3\",\r\n    \"amountChildren\": \"1\",\r\n    \"amountBaby\": \"1\",\r\n    \"checkinDate\": \"27/01/2025\", // 'dd/MM/yyyy'\r\n    \"checkoutDate\": \"30/01/2025\" // 'dd/MM/yyyy'\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1340,273 +1227,20 @@
 									}
 								},
 								"url": {
-									"raw": "{{local3070}}auth/refresh-token",
+									"raw": "{{local3030}}orders/update-order-by-id/4",
 									"host": [
-										"{{local3070}}auth"
+										"{{local3030}}orders"
 									],
 									"path": [
-										"refresh-token"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "HomePage",
-					"item": [
-						{
-							"name": "Get Pictures List",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{local3070}}pictures/get-pictures-list",
-									"host": [
-										"{{local3070}}pictures"
-									],
-									"path": [
-										"get-pictures-list"
+										"update-order-by-id",
+										"4"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "SearchPictureByName",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{local3070}}pictures/get-pictures-by-name?name=      hình     đẹp    ",
-									"host": [
-										"{{local3070}}pictures"
-									],
-									"path": [
-										"get-pictures-by-name"
-									],
-									"query": [
-										{
-											"key": "name",
-											"value": "      hình     đẹp    "
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Detail Page",
-					"item": [
-						{
-							"name": "Get Info Picture",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{local3070}}pictures/get-info-picture-by-picId/7",
-									"host": [
-										"{{local3070}}pictures"
-									],
-									"path": [
-										"get-info-picture-by-picId",
-										"7"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Check Saved Status",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{local3070}}pictures/check-userlogin-saved-picture-by-picId/1",
-									"host": [
-										"{{local3070}}pictures"
-									],
-									"path": [
-										"check-userlogin-saved-picture-by-picId",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Post Comment",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"picId\": 4,\r\n    \"commentContent\": \"Hình ảnh đẹp wá chời wá đất ^^\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{local3070}}pictures/post-comment",
-									"host": [
-										"{{local3070}}pictures"
-									],
-									"path": [
-										"post-comment"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "User",
-					"item": [
-						{
-							"name": "Get User Info",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{local3070}}user/get-user-info",
-									"host": [
-										"{{local3070}}user"
-									],
-									"path": [
-										"get-user-info"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "List Saved Pictures",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{local3070}}user/list-pictures-saved-by-user-loggedin",
-									"host": [
-										"{{local3070}}user"
-									],
-									"path": [
-										"list-pictures-saved-by-user-loggedin"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "List Created Pictures",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{local3070}}user/list-pictures-created-by-userloggedin",
-									"host": [
-										"{{local3070}}user"
-									],
-									"path": [
-										"list-pictures-created-by-userloggedin"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete Picture",
+							"name": "Delete Order By Id",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1622,7 +1256,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "",
+									"raw": "{\r\n    \"homeId\": \"8\",\r\n    \"customerUserId\": \"\", // bỏ trống nếu book cho chính mình\r\n    \"amountAdults\": \"3\",\r\n    \"amountChildren\": \"1\",\r\n    \"amountBaby\": \"1\",\r\n    \"checkinDate\": \"27/01/2025\", // 'dd/MM/yyyy'\r\n    \"checkoutDate\": \"30/01/2025\" // 'dd/MM/yyyy'\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1630,121 +1264,20 @@
 									}
 								},
 								"url": {
-									"raw": "{{local3070}}user/delete-picture/17",
+									"raw": "{{local3030}}orders/delete-order-by-id/25",
 									"host": [
-										"{{local3070}}user"
+										"{{local3030}}orders"
 									],
 									"path": [
-										"delete-picture",
-										"17"
+										"delete-order-by-id",
+										"25"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Add New Picture Local",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "postTitle",
-											"value": "Hình ảnh Nội thất đẹp cho văn phòng",
-											"description": "sẽ lấy tiêu đề đặt tên file hình",
-											"type": "text"
-										},
-										{
-											"key": "postContent",
-											"value": "Văn phòng với thiết kế màu trắng be, giúp toát lên vẻ tinh tế cùng với nội thất màu đen tạo điểm nhấn nhá cho văn phòng không nhàm chán",
-											"type": "text"
-										},
-										{
-											"key": "postPicture",
-											"description": "File tối đa 2MB",
-											"type": "file",
-											"src": "/C:/Users/congk/Desktop/smartphone-ringing.png"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{local3070}}user/add-new-picture-local",
-									"host": [
-										"{{local3070}}user"
-									],
-									"path": [
-										"add-new-picture-local"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Add New Picture Cloud",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "postTitle",
-											"value": "Hình ảnh Nội thất đẹp cho văn phòng",
-											"description": "sẽ lấy tiêu đề đặt tên file hình",
-											"type": "text"
-										},
-										{
-											"key": "postContent",
-											"value": "Văn phòng với thiết kế màu trắng be, giúp toát lên vẻ tinh tế cùng với nội thất màu đen tạo điểm nhấn nhá cho văn phòng không nhàm chán",
-											"type": "text"
-										},
-										{
-											"key": "postPicture",
-											"description": "File tối đa 2MB",
-											"type": "file",
-											"src": "/C:/Users/congk/Desktop/smartphone-ringing.png"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{local3070}}user/add-new-picture-cloud",
-									"host": [
-										"{{local3070}}user"
-									],
-									"path": [
-										"add-new-picture-cloud"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Check Username Available",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
+							"name": "Get Orders By CustomerId",
 							"request": {
 								"auth": {
 									"type": "bearer",
@@ -1758,170 +1291,14 @@
 								},
 								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"userName\":\"congbui\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
-									"raw": "{{local3070}}user/check-username-available",
+									"raw": "{{local3030}}orders/get-orders-by-customer-id/22",
 									"host": [
-										"{{local3070}}user"
+										"{{local3030}}orders"
 									],
 									"path": [
-										"check-username-available"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update User Info_Local",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "userName",
-											"value": "congbui",
-											"description": "sd đặt tên file avatar, là unique, có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "firstName",
-											"value": "Bùi",
-											"description": "có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "lastName",
-											"value": "         Hữu            Công",
-											"description": "có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "userBio",
-											"value": "sadfas asd asd asdas \nd sdsad df sdfg dg\ndfgdfg dfgdfg dfg dfg",
-											"description": "có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "userWeb",
-											"value": "http://nghein.com",
-											"description": "có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "userAge",
-											"value": "40",
-											"description": "nhập tuổi hoặc năm sinh (FE cần xử lý phân biệt)",
-											"type": "text"
-										},
-										{
-											"key": "avatar",
-											"description": "File tối đa 2MB",
-											"type": "file",
-											"src": "/C:/Users/congk/Desktop/smartphone-ringing.png"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{local3070}}user/update-user-info-avatar-local",
-									"host": [
-										"{{local3070}}user"
-									],
-									"path": [
-										"update-user-info-avatar-local"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update User Info_Cloud",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{acT_renew}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "userName",
-											"value": "",
-											"description": "sd đặt tên file avatar, là unique, có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "firstName",
-											"value": "",
-											"description": "có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "lastName",
-											"value": "         Hữu            Công",
-											"description": "có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "userBio",
-											"value": "sadfas asd asd asdas \nd sdsad df sdfg dg\ndfgdfg dfgdfg dfg dfg",
-											"description": "có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "userWeb",
-											"value": "http://nghein.com",
-											"description": "có thể rỗng",
-											"type": "text"
-										},
-										{
-											"key": "userAge",
-											"value": "40",
-											"description": "nhập tuổi hoặc năm sinh (FE cần xử lý phân biệt)",
-											"type": "text"
-										},
-										{
-											"key": "avatar",
-											"description": "File tối đa 2MB",
-											"type": "file",
-											"src": "/C:/Users/congk/Desktop/smartphone-ringing.png"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{local3070}}user/update-user-info-avatar-cloud",
-									"host": [
-										"{{local3070}}user"
-									],
-									"path": [
-										"update-user-info-avatar-cloud"
+										"get-orders-by-customer-id",
+										"22"
 									]
 								}
 							},

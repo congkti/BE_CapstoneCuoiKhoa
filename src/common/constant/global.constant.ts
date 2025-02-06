@@ -9,6 +9,10 @@ export const CLOUD_NAME = process.env.CLOUD_NAME;
 export const CLOUD_API_KEY = process.env.CLOUD_API_KEY;
 export const CLOUD_API_SECRET = process.env.CLOUD_API_SECRET;
 
+// information of app
+export const COMPANY_NAME = 'Airbnb';
+export const APP_NAME = 'Airbnb';
+
 // err code/message MulterError
 // có error code
 export const LIMITED_FILE_SIZE =
