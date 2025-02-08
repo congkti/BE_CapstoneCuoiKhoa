@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import * as path from 'node:path';
+import { NO_FILE_IN_REQ } from 'src/common/constant/global.constant';
 import deleteUploadedFile from 'src/common/multers/delete-uploaded-file.multer';
 import { PrismaService } from 'src/common/prisma/prisma.service';
 import { cleanString } from 'src/common/utils/handle-string.util';
@@ -109,8 +110,7 @@ export class HomesService {
   ) {
     // console.log(hid, req.body);
     // console.log({ file });
-    if (!file) throw new BadRequestException('No file in request');
-
+    if (!file) throw new BadRequestException(NO_FILE_IN_REQ);
     const arrPath = file.path?.split(path.sep);
     const imgUrl = arrPath?.join('/');
 
@@ -120,11 +120,11 @@ export class HomesService {
       },
     });
 
-    if (!isHomeExist)
+    if (!isHomeExist) {
+      // delete newly uploaded image file
+      deleteUploadedFile(imgUrl);
       throw new NotFoundException(`Home  with id#${hid} not found`);
-
-    // delete old image file of Home
-    deleteUploadedFile(isHomeExist.pic_url);
+    }
 
     const {
       homeName,
@@ -150,8 +150,14 @@ export class HomesService {
       hasFireplace,
     } = req.body;
 
-    if (!homeName) throw new BadRequestException('Home Name is required');
+    if (!homeName) {
+      // delete newly uploaded image file
+      deleteUploadedFile(imgUrl);
+      throw new BadRequestException('Home Name is required');
+    }
 
+    // delete old image of Home before updating
+    deleteUploadedFile(isHomeExist.pic_url);
     try {
       const homeUpdate = await this.prisma.homes.update({
         where: {
@@ -223,7 +229,7 @@ export class HomesService {
 
       return homeUpdate;
     } catch (err) {
-      // if error => delete uploaded image
+      // if error => delete newly uploaded image file
       deleteUploadedFile(imgUrl);
       console.log(err);
       throw new InternalServerErrorException(
@@ -234,8 +240,7 @@ export class HomesService {
 
   async createNewHome(req: Request, @UploadedFile() file: Express.Multer.File) {
     // console.log({ file });
-    if (!file) throw new BadRequestException('No file in request');
-
+    if (!file) throw new BadRequestException(NO_FILE_IN_REQ);
     const arrPath = file.path?.split(path.sep);
     const imgUrl = arrPath?.join('/');
 
@@ -263,7 +268,11 @@ export class HomesService {
       hasFireplace,
     } = req.body;
 
-    if (!homeName) throw new BadRequestException('Home Name is required');
+    if (!homeName) {
+      // delete newly uploaded image file
+      deleteUploadedFile(imgUrl);
+      throw new BadRequestException('Home Name is required');
+    }
 
     try {
       const newHome = await this.prisma.homes.create({
@@ -332,7 +341,7 @@ export class HomesService {
       });
       return newHome;
     } catch (err) {
-      // if error => delete uploaded image
+      // if error => delete newly uploaded image file
       deleteUploadedFile(imgUrl);
       console.log(err);
       throw new InternalServerErrorException(

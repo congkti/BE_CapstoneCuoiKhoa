@@ -11,7 +11,10 @@ import { users } from '@prisma/client';
 import { isValid, parse } from 'date-fns';
 import { cleanString } from 'src/common/utils/handle-string.util';
 import * as path from 'node:path';
-import { USER_NAME_NOT_AVAILABLE } from 'src/common/constant/global.constant';
+import {
+  NO_FILE_IN_REQ,
+  USER_NAME_NOT_AVAILABLE,
+} from 'src/common/constant/global.constant';
 import { ConfigService } from '@nestjs/config';
 import { TUser } from '../auth/dto/auth.dto';
 import deleteUploadedFile from 'src/common/multers/delete-uploaded-file.multer';
@@ -78,7 +81,7 @@ export class UsersService {
     // console.log(req.user);
     // console.log(req.body);
     // console.log({ file });
-    if (!file) throw new BadRequestException('No file in request');
+    if (!file) throw new BadRequestException(NO_FILE_IN_REQ);
 
     const arrPath = file.path?.split(path.sep);
     const imgUrl = arrPath?.join('/');
@@ -98,11 +101,11 @@ export class UsersService {
           user_name: userName,
         },
       }));
-    if (isUserExist && user_id !== isUserExist.user_id)
+    if (isUserExist && user_id !== isUserExist.user_id) {
+      // delete newly uploaded image file
+      deleteUploadedFile(imgUrl);
       throw new BadRequestException(USER_NAME_NOT_AVAILABLE);
-
-    // delete old avatar in req.user
-    deleteUploadedFile(user.avatar);
+    }
 
     const fullName =
       !firstName && !lastName
@@ -118,6 +121,8 @@ export class UsersService {
         ? parse(birthDay, 'dd/MM/yyyy', new Date())
         : null;
 
+    // delete old avatar in req.user before updating
+    deleteUploadedFile(user.avatar);
     try {
       const newUpdateUser = await this.prisma.users.update({
         where: {
@@ -143,7 +148,7 @@ export class UsersService {
       });
       return newUpdateUser;
     } catch (err) {
-      // if error => delete uploaded avatar image
+      // if error => delete newly uploaded image file
       deleteUploadedFile(imgUrl);
       console.log(err);
       throw new InternalServerErrorException(

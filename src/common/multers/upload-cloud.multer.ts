@@ -26,11 +26,14 @@ export const storageCloud = new CloudinaryStorage({
       ? 'uid' + user.user_id
       : req.body.userName;
 
-    const titleAlias = req.body.postTitle
-      ? createUrlPart(req.body.postTitle)
-      : req.originalUrl.includes('-avatar-')
-        ? 'avatar-' + uprefix
-        : 'file-upload';
+    const titleAlias =
+      req.body.postTitle || req.body.homeName || req.body.locationName
+        ? createUrlPart(req.body.postTitle) ||
+          createUrlPart(req.body.homeName) ||
+          createUrlPart(req.body.locationName)
+        : req.originalUrl.includes('-avatar-')
+          ? 'avatar-' + uprefix
+          : 'file-upload';
 
     const dateString = getDateNowString(new Date());
     // Tạo tên file theo tiêu đề bài viết
@@ -49,6 +52,11 @@ export const storageCloud = new CloudinaryStorage({
     } else if (req.originalUrl.includes('-home-')) {
       return {
         folder: `${UPLOAD_DIR_CLOUD}/post-homes`,
+        public_id: fileName,
+      };
+    } else if (req.originalUrl.includes('-location-')) {
+      return {
+        folder: `${UPLOAD_DIR_CLOUD}/post-locations`,
         public_id: fileName,
       };
     } else {

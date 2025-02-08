@@ -7,6 +7,7 @@ import { KEY_LOCAL_FILE, UPLOAD_DIR_LOCAL } from './config.multer';
 
 fs.mkdirSync(`${UPLOAD_DIR_LOCAL}/avatar/`, { recursive: true });
 fs.mkdirSync(`${UPLOAD_DIR_LOCAL}/post-homes/`, { recursive: true });
+fs.mkdirSync(`${UPLOAD_DIR_LOCAL}/post-locations/`, { recursive: true });
 
 export const storageLocal = diskStorage({
   destination: function (req, file, cb) {
@@ -14,7 +15,9 @@ export const storageLocal = diskStorage({
     if (req.originalUrl.includes('-avatar-')) {
       cb(null, `${UPLOAD_DIR_LOCAL}/avatar/`); // Lưu vào thư mục upload/avatar
     } else if (req.originalUrl.includes('-home-')) {
-      cb(null, `${UPLOAD_DIR_LOCAL}/post-homes/`); // Lưu vào thư mục upload/post-homes (cho các ảnh bài đăng)
+      cb(null, `${UPLOAD_DIR_LOCAL}/post-homes/`); // Lưu vào thư mục upload/post-homes (cho các ảnh bài đăng Home, Rooms)
+    } else if (req.originalUrl.includes('-location-')) {
+      cb(null, `${UPLOAD_DIR_LOCAL}/post-locations/`); // Lưu vào thư mục upload/post-locations (cho các ảnh bài đăng Locations)
     } else {
       cb(null, UPLOAD_DIR_LOCAL); // Lưu vào thư mục upload (cho các ảnh còn lại)
     }
@@ -32,11 +35,14 @@ export const storageLocal = diskStorage({
       ? 'uid' + user.user_id
       : req.body.userName;
 
-    const titleAlias = req.body.postTitle
-      ? createUrlPart(req.body.postTitle)
-      : req.originalUrl.includes('-avatar-')
-        ? 'avatar-' + uprefix
-        : 'file-upload';
+    const titleAlias =
+      req.body.postTitle || req.body.homeName || req.body.locationName
+        ? createUrlPart(req.body.postTitle) ||
+          createUrlPart(req.body.homeName) ||
+          createUrlPart(req.body.locationName)
+        : req.originalUrl.includes('-avatar-')
+          ? 'avatar-' + uprefix
+          : 'file-upload';
     const dateString = getDateNowString(new Date());
 
     // const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);

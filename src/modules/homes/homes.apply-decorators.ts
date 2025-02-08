@@ -25,7 +25,7 @@ export const DecorUpdateHome = () => {
 
 // decorators CreateNewHome api
 export const DecorCreateNewHome = () => {
-  return applyDecorators(ResponseMetaData('Create new home successful'));
+  return applyDecorators(ResponseMetaData('Create new home successful', 201));
 };
 
 // decorators GetHomesByLocId api

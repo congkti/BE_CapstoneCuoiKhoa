@@ -4,17 +4,17 @@ export const ACCESS_TOKEN_EXPIRES = process.env.ACCESS_TOKEN_EXPIRES;
 export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 export const REFRESH_TOKEN_EXPIRES = process.env.REFRESH_TOKEN_EXPIRES;
 
+// information of app
+export const COMPANY_NAME = 'Airbnb';
+export const APP_NAME = 'Airbnb';
+
 // cloudinary
 export const CLOUD_NAME = process.env.CLOUD_NAME;
 export const CLOUD_API_KEY = process.env.CLOUD_API_KEY;
 export const CLOUD_API_SECRET = process.env.CLOUD_API_SECRET;
 
-// information of app
-export const COMPANY_NAME = 'Airbnb';
-export const APP_NAME = 'Airbnb';
-
 // err code/message MulterError
-// có error code
+// ==> có error code
 export const LIMITED_FILE_SIZE =
   'Upload file size exceeds limit. Maximum size allowed is 2MB.';
 
@@ -26,12 +26,13 @@ export const LIMIT_FILE_COUNT =
 export const LIMIT_UNEXPECTED_FILE =
   'Unexpected file field. Please check your form data.';
 
-// ko có error code
+// ==> ko có error code
 export const INVALID_FILE_FORMAT =
   'Invalid file format. Only JPEG, PNG, GIF and WEBP are allowed.'; // trả lỗi ở cb
 export const DEFAULT = 'Multer error occurred.';
 
-// lỗi chung
+// lỗi chung - có kiểm soát
+// ==> Lỗi User
 export const USER_IS_BANNED =
   'User is banned or pending deletion. Please contact site administrator';
 export const USER_NOT_EXIST =
@@ -39,5 +40,8 @@ export const USER_NOT_EXIST =
 export const INVALID_USER = 'Invalid email or password';
 export const USER_NAME_NOT_AVAILABLE =
   'Username is not available. Please choose another name.';
+
+// ==> Lỗi file, data truyền lên Req, Body, Param
 export const UNIQUE_FIELD_DUPLICATED =
   'The request data sent to server has unique field(s), which duplicated the field stored in the database. Please check your form-data again.';
+export const NO_FILE_IN_REQ = 'No file in request';

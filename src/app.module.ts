@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { HomesModule } from './modules/homes/homes.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { LocationsModule } from './modules/locations/locations.module';
+import { CommentsModule } from './modules/comments/comments.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { OrdersModule } from './modules/orders/orders.module';
     UsersModule,
     HomesModule,
     OrdersModule,
+    LocationsModule,
+    CommentsModule,
   ],
   // controllers: [AppController],
   // providers: [AppService],
