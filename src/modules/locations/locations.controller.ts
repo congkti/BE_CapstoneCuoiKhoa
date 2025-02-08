@@ -16,8 +16,13 @@ import { Public } from 'src/common/decorators/public.decorator';
 import {
   DecorCreateNewLocation,
   DecorGetAllLoacations,
+  DecorGetDetailLocation,
+  DecorUpdateLocation,
 } from './locations.apply-decorators';
-import { DecorUploadLocal } from 'src/common/multers/upload-file.apply-decorators';
+import {
+  DecorUploadCloud,
+  DecorUploadLocal,
+} from 'src/common/multers/upload-file.apply-decorators';
 import { Request } from 'express';
 
 @Controller('locations')
@@ -31,31 +36,55 @@ export class LocationsController {
     @Req() req: Request,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.locationsService.createLocationLocal(req, file);
+    return this.locationsService.createLocation(req, file);
   }
 
-  @Public()
+  @Post('create-new-location-cloud')
+  @DecorUploadCloud('locationPicture')
+  @DecorCreateNewLocation()
+  createLocationCloud(
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.locationsService.createLocation(req, file);
+  }
+
   @Get('get-all-locations')
   @DecorGetAllLoacations()
   findAllLoactions() {
-    return this.locationsService.findAllLoactions();
+    return this.locationsService.findAllLocations();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.locationsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateLocationDto: UpdateLocationDto,
+  @Patch('update-location-local/:lid')
+  @DecorUploadLocal('locationPicture')
+  @DecorUpdateLocation()
+  updateLocationLocal(
+    @Param('lid') lid: string,
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.locationsService.update(+id, updateLocationDto);
+    return this.locationsService.updateLocation(+lid, req, file);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.locationsService.remove(+id);
+  @Patch('update-location-cloud/:lid')
+  @DecorUploadCloud('locationPicture')
+  @DecorUpdateLocation()
+  updateLocationCloud(
+    @Param('lid') lid: string,
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.locationsService.updateLocation(+lid, req, file);
+  }
+
+  @Delete('remove-location/:lid')
+  removeLocation(@Param('lid') lid: string) {
+    return this.locationsService.removeLocation(+lid);
+  }
+
+  @Get('get-detail-location-by-id/:lid')
+  @DecorGetDetailLocation()
+  getDeatailLocation(@Param('lid') lid: string) {
+    return this.locationsService.getDeatailLocation(+lid);
   }
 }

@@ -780,7 +780,7 @@
 									"formdata": [
 										{
 											"key": "homeName",
-											"value": "     Peaceful   Retreat 3   ",
+											"value": "     Peaceful   Retreat Duyên Hải   ",
 											"description": "id3",
 											"type": "text"
 										},
@@ -1292,12 +1292,296 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{local3030}}orders/get-orders-by-customer-id/22",
+									"raw": "{{local3030}}orders/get-orders-by-customer-id/15",
 									"host": [
 										"{{local3030}}orders"
 									],
 									"path": [
 										"get-orders-by-customer-id",
+										"15"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Locations",
+					"item": [
+						{
+							"name": "Get All Locations",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}locations/get-all-locations",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"get-all-locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Detail Location By Id",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}locations/get-detail-location-by-id/23",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"get-detail-location-by-id",
+										"23"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create New Location_Local",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "locationName",
+											"value": "   Thảo    Điền   Rose           Villa",
+											"type": "text"
+										},
+										{
+											"key": "locationCity",
+											"value": "Hồ                 Chí Minh  ",
+											"type": "text"
+										},
+										{
+											"key": "locationNational",
+											"value": "           Việt Nam ",
+											"type": "text"
+										},
+										{
+											"key": "locationPicture",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/metro_hcm.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}locations/create-new-location-local",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"create-new-location-local"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create New Location_Cloud",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "locationName",
+											"value": "   Thảo    Điền   Rose           Villa",
+											"type": "text"
+										},
+										{
+											"key": "locationCity",
+											"value": "Hồ                 Chí Minh  ",
+											"type": "text"
+										},
+										{
+											"key": "locationNational",
+											"value": "           Việt Nam ",
+											"type": "text"
+										},
+										{
+											"key": "locationPicture",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/smartphone-ringing.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}locations/create-new-location-cloud",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"create-new-location-cloud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Location_Local",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "locationName",
+											"value": "Golden Gate New",
+											"type": "text"
+										},
+										{
+											"key": "locationCity",
+											"value": "San Francisco, California",
+											"type": "text"
+										},
+										{
+											"key": "locationNational",
+											"value": "USA",
+											"type": "text"
+										},
+										{
+											"key": "locationPicture",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/metro_hcm.jpg"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}locations/update-location-local/20",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"update-location-local",
+										"20"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Location_Cloud",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "locationName",
+											"value": "     Golden Gate        Bridge",
+											"type": "text"
+										},
+										{
+											"key": "locationCity",
+											"value": "San Francisco, California",
+											"type": "text"
+										},
+										{
+											"key": "locationNational",
+											"value": "USA",
+											"type": "text"
+										},
+										{
+											"key": "locationPicture",
+											"type": "file",
+											"src": "/C:/Users/congk/Desktop/Warren Buffett.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{local3030}}locations/update-location-cloud/20",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"update-location-cloud",
+										"20"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Location",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}locations/remove-location/22",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"remove-location",
 										"22"
 									]
 								}

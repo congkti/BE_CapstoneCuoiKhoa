@@ -406,7 +406,7 @@ export class HomesService {
   }
 
   async deleteHome(hid: number) {
-    if (!hid) throw new BadRequestException('Home Id not found on request');
+    // if (!hid) throw new BadRequestException('Home Id not found on request');
 
     const isHomeExist = await this.prisma.homes.findFirst({
       where: {
@@ -415,10 +415,10 @@ export class HomesService {
     });
     if (!isHomeExist) throw new NotFoundException('Home does not exist');
     // console.log({ isHomeExist });
-    try {
-      // delete images of this home before
-      deleteUploadedFile(isHomeExist.pic_url);
 
+    // delete images of this home before
+    deleteUploadedFile(isHomeExist.pic_url);
+    try {
       await this.prisma.homes.delete({
         where: {
           home_id: hid,
@@ -431,7 +431,7 @@ export class HomesService {
         deletedDate: new Date(),
       };
     } catch (err) {
-      console.log('ERROR:', err);
+      console.log('ERROR WHEN DELETING HOME: ', err);
     }
   }
 }
