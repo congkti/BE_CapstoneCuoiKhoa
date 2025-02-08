@@ -37,7 +37,7 @@ model comments {
   home_id         Int?
   comment_content String    @db.Text
   comment_rate    Int?      @db.TinyInt
-  is_deleted      Boolean?  @default(false)
+  is_banned       Boolean?  @default(false)
   created_at      DateTime? @default(now()) @db.Timestamp(0)
   updated_at      DateTime? @default(now()) @db.Timestamp(0)
   users           users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_1")

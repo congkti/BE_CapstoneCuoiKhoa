@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS comments (
 	CONSTRAINT Check_minmax CHECK(comment_rate BETWEEN 1 AND 5),
 	-- comment_rate INT UNSIGNED CHECK(comment_rate BETWEEN 1 AND 5),
 	
-	is_deleted BOOLEAN DEFAULT FALSE,
+	is_banned BOOLEAN DEFAULT FALSE,
 	
 	-- comment_date = created_at
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

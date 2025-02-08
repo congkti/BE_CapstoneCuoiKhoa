@@ -1587,6 +1587,394 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Search LocationID_ByName",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}locations/search-location-id-by-name?locName=biển",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"search-location-id-by-name"
+									],
+									"query": [
+										{
+											"key": "locName",
+											"value": "biển",
+											"description": "only search by location name"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search Location_ByKeyword_Pagination",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}locations/search-location-by-keyword?page=2&pageSize=3&keyword=    việt   ",
+									"host": [
+										"{{local3030}}locations"
+									],
+									"path": [
+										"search-location-by-keyword"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2",
+											"description": "page number"
+										},
+										{
+											"key": "pageSize",
+											"value": "3",
+											"description": "items per page"
+										},
+										{
+											"key": "keyword",
+											"value": "    việt   ",
+											"description": "search by location Name, City, or National"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "Create New Comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"6\",\r\n    \"homeId\": \"5\",\r\n    \"commentContent\": \"   Nhà   quá đẹp, tiện nghi.     Rất thích 123 \",\r\n    \"commentRate\": \"5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local3030}}comments/add-new-comment",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"add-new-comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Comments",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"2\",\r\n    \"homeId\": \"1\",\r\n    \"commentContent\": \"   Nhà   quá đẹp, tiện nghi.     Rất thích  \",\r\n    \"commentRate\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local3030}}comments/list-all",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"list-all"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Comments_isBanned",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"2\",\r\n    \"homeId\": \"1\",\r\n    \"commentContent\": \"   Nhà   quá đẹp, tiện nghi.     Rất thích  \",\r\n    \"commentRate\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local3030}}comments/list-all-banned",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"list-all-banned"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Detail Comment",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": \"2\",\r\n    \"homeId\": \"1\",\r\n    \"commentContent\": \"   Nhà   quá đẹp, tiện nghi.     Rất thích  \",\r\n    \"commentRate\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local3030}}comments/view-detail-comment/5",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"view-detail-comment",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Block Comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"reasonBlocked\": \"   xúc phạm  cộng    đồng\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local3030}}comments/block-comment/3",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"block-comment",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UnBlock Comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}comments/unblock-comment/3",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"unblock-comment",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}comments/remove-comment/16",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"remove-comment",
+										"16"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{acT_renew}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"commentContent\": \"   Nhà   quá đẹp, tiện nghi.     Rất thích 12345 \",\r\n    \"commentRate\": \"5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local3030}}comments/update-comment/13",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"update-comment",
+										"13"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Comments_ByHomeID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}comments/get-comments-of-home/5",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"get-comments-of-home",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Comments_ByUserID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local3030}}comments/get-comments-of-user/3",
+									"host": [
+										"{{local3030}}comments"
+									],
+									"path": [
+										"get-comments-of-user",
+										"3"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}

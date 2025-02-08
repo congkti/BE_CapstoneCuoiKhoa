@@ -8,11 +8,9 @@ import {
   Delete,
   UploadedFile,
   Req,
+  Query,
 } from '@nestjs/common';
 import { LocationsService } from './locations.service';
-import { CreateLocationDto } from './dto/create-location.dto';
-import { UpdateLocationDto } from './dto/update-location.dto';
-import { Public } from 'src/common/decorators/public.decorator';
 import {
   DecorCreateNewLocation,
   DecorGetAllLoacations,
@@ -24,6 +22,9 @@ import {
   DecorUploadLocal,
 } from 'src/common/multers/upload-file.apply-decorators';
 import { Request } from 'express';
+import { LocationNameDto } from './dto/locations.dto';
+import { Public } from 'src/common/decorators/public.decorator';
+import { SearchKeywordPaginationDto } from 'src/common/types/all.types';
 
 @Controller('locations')
 export class LocationsController {
@@ -86,5 +87,17 @@ export class LocationsController {
   @DecorGetDetailLocation()
   getDeatailLocation(@Param('lid') lid: string) {
     return this.locationsService.getDeatailLocation(+lid);
+  }
+
+  @Get('search-location-id-by-name')
+  @DecorGetAllLoacations()
+  searchLocationIdByName(@Query() query: LocationNameDto) {
+    return this.locationsService.searchLocationIdByName(query);
+  }
+
+  @Get('search-location-by-keyword')
+  @DecorGetAllLoacations()
+  searchLocatioByKeywordPagination(@Query() query: SearchKeywordPaginationDto) {
+    return this.locationsService.searchLocatioByKeywordPagination(query);
   }
 }
